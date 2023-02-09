@@ -11,6 +11,11 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import environ
+
+# Initialise environment variables
+env = environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,10 +25,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-^wk#kl_4om8wk$$*lk0_^24cb#h^dmqn%!n0kr@_(^*odcuuib'
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = []
 
@@ -46,7 +51,7 @@ EXTERNAL_APPS = [
 ]
 
 LOCAL_APPS = [
-    "auth",
+    "authentication",
     "commercial",
 ]
 
@@ -88,8 +93,12 @@ WSGI_APPLICATION = 'games_e_commerce.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': env("DB_NAME"),
+        'USER': env("DB_USER"),
+        'PASSWORD': env("DB_PASSWORD"),
+        'HOST': env("DB_HOST"),
+        'PORT': env("DB_PORT"),
     }
 }
 
@@ -140,9 +149,8 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
-    "DEFAULT_FILTER_BACKENDS": ["rest_framework_filters.backends.ComplexFilterBackend"],
     "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
-    "DEFAULT_PAGINATION_CLASS": "api.utils.FilterPagination",
+    "DEFAULT_PAGINATION_CLASS": "games_e_commerce.utils.FilterPagination",
     "PAGE_SIZE": 100,
     "DATE_FORMAT": "%d/%m/%Y",
     "DATE_INPUT_FORMATS": ["%d/%m/%Y", "%d-%m-%Y", "%d-%m-%Y %H:%M:%S", "%d/%m/%Y %H:%M:%S"],
