@@ -1,3 +1,5 @@
+import decimal
+
 from django.db import transaction
 from rest_framework import serializers
 
@@ -40,13 +42,13 @@ class CartSerializer(serializers.ModelSerializer):
         model = Cart
         fields = "__all__"
 
-    def get_subtotal_price(self, obj):
+    def get_subtotal_price(self, obj) -> float:
         return obj.subtotal_price
 
-    def get_total_freight(self, obj):
+    def get_total_freight(self, obj) -> float:
         return obj.total_freight
 
-    def get_total_price(self, obj):
+    def get_total_price(self, obj) -> float:
         return obj.total_price
 
     @transaction.atomic
@@ -151,10 +153,10 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = "__all__"
 
-    def get_subtotal_price(self, obj):
+    def get_subtotal_price(self, obj) -> decimal.Decimal:
         return obj.subtotal_price
 
-    def get_total_price(self, obj):
+    def get_total_price(self, obj) -> decimal.Decimal:
         return obj.total_price
 
     @transaction.atomic

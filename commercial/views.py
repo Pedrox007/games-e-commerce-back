@@ -1,8 +1,6 @@
-import http
-
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema
-from rest_framework import viewsets, mixins, generics, serializers, filters
+from rest_framework import viewsets, mixins, serializers, filters, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -30,7 +28,8 @@ class CartViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.Gen
         queryset = self.get_queryset().filter(user=request.user).order_by("-created_at").first()
 
         if not queryset:
-            return Response({"error": "There isn't cart data for this user."}, status=http.HTTPStatus.NOT_FOUND)
+            return Response({"error": "There isn't cart data for this user."}, status=status.HTTP_404_NOT_FOUND)
+
         return Response(self.get_serializer(queryset).data)
 
     @action(detail=False, methods=["delete"], url_path="delete-cart")
@@ -38,11 +37,11 @@ class CartViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.Gen
         queryset = self.get_queryset().filter(user=request.user)
 
         if not queryset:
-            return Response({"error": "There isn't cart data for this user."}, status=http.HTTPStatus.NOT_FOUND)
+            return Response({"error": "There isn't cart data for this user."}, status=status.HTTP_404_NOT_FOUND)
 
         queryset.delete()
 
-        return Response({"message": "Cart deleted."}, status=http.HTTPStatus.ACCEPTED)
+        return Response({"message": "Cart deleted."}, status=status.HTTP_202_ACCEPTED)
 
 
 class OrderViewSet(viewsets.ModelViewSet):
@@ -60,7 +59,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         cart_queryset = Cart.objects.filter(user=request.user).order_by("-created_at").first()
 
         if not cart_queryset:
-            return Response({"error": "There isn't cart data for this user."}, status=http.HTTPStatus.NOT_FOUND)
+            return Response({"error": "There isn't cart data for this user."}, status=status.HTTP_404_NOT_FOUND)
 
         data = {
             "user": self.request.user.id,
