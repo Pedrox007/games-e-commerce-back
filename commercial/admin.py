@@ -15,14 +15,14 @@ class CartAdmin(admin.ModelAdmin):
 
 @admin.register(CartItem)
 class CartItemAdmin(admin.ModelAdmin):
-    list_display = ("id", "product", "quantity")
+    list_display = ("id", "product", "price")
 
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ("id", "user")
+    list_display = ("id", "user", "total_price", "freight")
 
 
 @admin.register(OrderItem)
 class OrderItemAdmin(admin.ModelAdmin):
-    list_display = ("id", "product", "quantity", "freight")
+    list_display = ("id", "product", "price")

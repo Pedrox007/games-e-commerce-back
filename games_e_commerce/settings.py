@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 import environ
 
+
 # Initialise environment variables
 env = environ.Env()
 environ.Env.read_env()
@@ -48,6 +49,7 @@ EXTERNAL_APPS = [
     "rest_framework",
     "django_filters",
     "rest_framework_simplejwt",
+    "drf_spectacular",
 ]
 
 LOCAL_APPS = [
@@ -151,10 +153,20 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
-    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
-    "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_PAGINATION_CLASS": "games_e_commerce.utils.FilterPagination",
     "PAGE_SIZE": 100,
     "DATE_FORMAT": "%d/%m/%Y",
     "DATE_INPUT_FORMATS": ["%d/%m/%Y", "%d-%m-%Y", "%d-%m-%Y %H:%M:%S", "%d/%m/%Y %H:%M:%S"],
 }
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Games E-Commerce",
+    "DESCRIPTION": "This a games e-commerce application",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "COMPONENT_SPLIT_REQUEST": True,
+}
+
+FREIGHT_PRICE = env("FREIGHT_PRICE")
