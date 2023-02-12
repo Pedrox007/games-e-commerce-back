@@ -1,11 +1,11 @@
 from django.contrib.auth.models import User
-from rest_framework.permissions import AllowAny
 
+from authentication.permissions import UserPermission
 from authentication.serializers import RegisterSerializer
-from rest_framework import generics
+from rest_framework import viewsets, mixins
 
 
-class RegisterView(generics.CreateAPIView):
+class UserViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     queryset = User.objects.all()
-    permission_classes = (AllowAny,)
+    permission_classes = [UserPermission]
     serializer_class = RegisterSerializer
