@@ -41,7 +41,7 @@ class CartViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.Gen
 
         queryset.delete()
 
-        return Response({"message": "Cart deleted."}, status=status.HTTP_202_ACCEPTED)
+        return Response({"message": "Cart deleted."}, status=status.HTTP_204_NO_CONTENT)
 
 
 class OrderViewSet(viewsets.ModelViewSet):
@@ -74,4 +74,4 @@ class OrderViewSet(viewsets.ModelViewSet):
         except serializers.ValidationError as errors:
             raise serializers.ValidationError({"order": errors.detail})
 
-        return Response(order_serializer.data)
+        return Response(order_serializer.data, status=status.HTTP_201_CREATED)
