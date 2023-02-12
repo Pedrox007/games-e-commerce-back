@@ -16,8 +16,8 @@ class BaseModel(models.Model):
 class Product(BaseModel):
     name = models.CharField("Name", max_length=100, db_index=True)
     price = models.DecimalField("Price", max_digits=20, decimal_places=2)
-    score = models.PositiveIntegerField("Score")
-    image = models.ImageField("Image", upload_to="images")
+    score = models.PositiveIntegerField("Score", blank=True, null=True)
+    image = models.ImageField("Image", upload_to="images", blank=True, null=True)
 
     class Meta:
         verbose_name = "Product"
